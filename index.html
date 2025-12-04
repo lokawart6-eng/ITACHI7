@@ -43,6 +43,7 @@ input{
 
 <div id="box">
 <h2>ITACHI7</h2>
+
 <div id="login">
 <input id="name" placeholder="اكتب اسمك">
 <br><br>
@@ -57,56 +58,76 @@ input{
 </div>
 
 <div id="leader" style="display:none;">
-<h3>لوحة الفائزين</h3>
+<h3>النتيجة</h3>
 <p id="best"></p>
 <button onclick="location.reload()">إعادة اللعب</button>
 </div>
+
 </div>
 
 <script>
-let time=60,score=0;
-let current=0;
-let questions=[
+let time = 60;
+let score = 0;
+let current = 0;
+
+let questions = [
  ["ما اسم أسرع حيوان؟",["الفهد","الحصان","النسر"],0],
  ["كم عدد الكواكب؟",["8","9","7"],0],
  ["أكبر قارة؟",["آسيا","أوروبا","أمريكا"],0],
  ["عاصمة المغرب؟",["الرباط","فاس","مراكش"],0],
- ["كم دقيقة الساعة؟",["60","100","30"],0]
+ ["كم دقيقة في الساعة؟",["60","100","30"],0],
+ ["كم ثانية في الدقيقة؟",["60","50","100"],0],
+ ["ما لون السماء؟",["أزرق","أحمر","أخضر"],0],
+ ["كم عدد القارات؟",["7","6","5"],0],
+ ["ما هو البحر الأكبر؟",["الهادي","الميت","الأحمر"],0],
+ ["كم عدد أيام الأسبوع؟",["7","5","10"],0]
 ];
 
 function startGame(){
- if(name.value=="")return;
- login.style.display="none";
- game.style.display="block";
+ if(name.value == "") return;
+ login.style.display = "none";
+ game.style.display = "block";
+
  setInterval(()=>{
   time--;
-  timer.innerHTML=time;
-  if(time<=0)end();
+  timer.innerHTML = time;
+  if(time <= 0) endGame();
  },1000);
- show();
+
+ showQuestion();
 }
-function show(){
- let q=questions[current];
- document.getElementById("q").innerHTML=q[0];
- answers.innerHTML="";
+
+function showQuestion(){
+ let q = questions[current];
+ document.getElementById("q").innerHTML = q[0];
+ answers.innerHTML = "";
+
  q[1].forEach((a,i)=>{
-  let b=document.createElement("button");
-  b.innerHTML=a;
-  b.onclick=()=>check(i);
+  let b = document.createElement("button");
+  b.innerHTML = a;
+  b.onclick = ()=>checkAnswer(i);
   answers.appendChild(b);
  });
 }
-function check(i){
- if(i===questions[current][2])score++;
- document.getElementById("score").innerHTML=score;
+
+function checkAnswer(i){
+ if(i === questions[current][2]) score++;
+ document.getElementById("score").innerHTML = score;
+
  current++;
- if(current>=questions.length)end();
- else show();
+ if(current >= questions.length) endGame();
+ else showQuestion();
 }
-function end(){
- game.style.display="none";
- leader.style.display="block";
- best.innerHTML="أفضل نتيجة: "+score;
+
+function endGame(){
+ game.style.display = "none";
+ leader.style.display = "block";
+
+ if(score < 5){
+  best.innerHTML = "❌ لقد خسرت<br>نتيجتك: " + score;
+ } else {
+  best.innerHTML = "✅ فزت!<br>نتيجتك: " + score;
+ }
 }
 </script>
 
