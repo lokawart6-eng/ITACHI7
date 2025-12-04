@@ -1,1 +1,114 @@
-index.html
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<title>ITACHI7 - لعبة ألغاز</title>
+<style>
+body{
+  font-family: Arial;
+  background:#f2f7ff;
+  text-align:center;
+  margin:0;
+  padding:0;
+}
+#box{
+  width:95%;
+  max-width:600px;
+  margin:40px auto;
+  background:white;
+  padding:20px;
+  border-radius:10px;
+  box-shadow:0 0 10px #aaa;
+}
+button{
+  background:#3498db;
+  color:white;
+  border:none;
+  padding:10px;
+  margin:5px;
+  width:80%;
+  border-radius:5px;
+}
+input{
+  padding:10px;
+  width:80%;
+}
+#timer{
+  font-size:18px;
+  color:red;
+}
+</style>
+</head>
+<body>
+
+<div id="box">
+<h2>ITACHI7</h2>
+<div id="login">
+<input id="name" placeholder="اكتب اسمك">
+<br><br>
+<button onclick="startGame()">دخول</button>
+</div>
+
+<div id="game" style="display:none;">
+<p id="timer">60</p>
+<h3 id="q"></h3>
+<div id="answers"></div>
+<p>النقاط: <span id="score">0</span></p>
+</div>
+
+<div id="leader" style="display:none;">
+<h3>لوحة الفائزين</h3>
+<p id="best"></p>
+<button onclick="location.reload()">إعادة اللعب</button>
+</div>
+</div>
+
+<script>
+let time=60,score=0;
+let current=0;
+let questions=[
+ ["ما اسم أسرع حيوان؟",["الفهد","الحصان","النسر"],0],
+ ["كم عدد الكواكب؟",["8","9","7"],0],
+ ["أكبر قارة؟",["آسيا","أوروبا","أمريكا"],0],
+ ["عاصمة المغرب؟",["الرباط","فاس","مراكش"],0],
+ ["كم دقيقة الساعة؟",["60","100","30"],0]
+];
+
+function startGame(){
+ if(name.value=="")return;
+ login.style.display="none";
+ game.style.display="block";
+ setInterval(()=>{
+  time--;
+  timer.innerHTML=time;
+  if(time<=0)end();
+ },1000);
+ show();
+}
+function show(){
+ let q=questions[current];
+ document.getElementById("q").innerHTML=q[0];
+ answers.innerHTML="";
+ q[1].forEach((a,i)=>{
+  let b=document.createElement("button");
+  b.innerHTML=a;
+  b.onclick=()=>check(i);
+  answers.appendChild(b);
+ });
+}
+function check(i){
+ if(i===questions[current][2])score++;
+ document.getElementById("score").innerHTML=score;
+ current++;
+ if(current>=questions.length)end();
+ else show();
+}
+function end(){
+ game.style.display="none";
+ leader.style.display="block";
+ best.innerHTML="أفضل نتيجة: "+score;
+}
+</script>
+
+</body>
+</html>
